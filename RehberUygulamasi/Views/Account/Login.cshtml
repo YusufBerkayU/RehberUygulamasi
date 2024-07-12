@@ -1,0 +1,64 @@
+﻿@model RehberUygulamasi.Models.LoginViewModel
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giriş Yap</title>
+    <link rel="stylesheet" href="~/css/login.css"> 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <div class="login-container">
+        <h2>Giriş Yap</h2>
+        <form asp-controller="Person" asp-action="Index" method="post">
+            <div class="form-group">
+                <label for="Email">E-posta:</label>
+                <input type="email" id="Email" name="Email" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="Password">Şifre:</label>
+                <input type="password" id="Password" name="Password" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <input type="checkbox" id="RememberMe" name="RememberMe" />
+                <label for="RememberMe">Beni Hatırla</label>
+            </div>
+            <button type="submit" class="btn">Giriş Yap</button>
+            <div class="register-link">
+                <p>Hesabınız yok mu? <a asp-controller="Account" asp-action="Register">Kayıt Ol</a></p>
+            </div>
+        </form>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#btnLogin').click(function () {
+                var email = $('#Email').val();
+                var password = $('#Password').val();
+                var rememberMe = $('#RememberMe').is(':checked');
+
+                $.ajax({
+                    url: '/Account/Login',  // Backend API endpoint
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ Email: email, Password: password, RememberMe: rememberMe }),
+                    success: function (response) {
+                        console.log('Login successful:', response);
+                        // Redirect to dashboard on successful login
+                        window.location.href = '@Url.Action("Index", "Home")';
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('Login failed:', error);
+                        alert('Giriş Başarısız: ' + xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

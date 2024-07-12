@@ -1,0 +1,67 @@
+﻿@model IEnumerable<RehberUygulamasi.Models.Person>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Person List</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/giriş.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" />
+</head>
+<body>
+    <div class="container mt-3">
+        <h1>Person List</h1>
+        <a href="@Url.Action("Create", "Person")" class="btn btn-primary mb-3">Yeni Kişi Ekle</a>
+        <table id="personsTable" class="display">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>AD</th>
+                    <th>SOYAD</th>
+                    <th>TEL NO</th>
+                    <th>ADRES</th>
+                    <th>FOTOĞRAF</th>
+                    <th>İŞLEMLER</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var person in Model)
+                {
+                    <tr>
+                        <td>@person.Id</td>
+                        <td>@person.FirstName</td>
+                        <td>@person.LastName</td>
+                        <td>@person.PhoneNumber</td>
+                        <td>@person.Address</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(person.PhotoPath))
+                            {
+                                <img src="~/uploads/@person.PhotoPath" alt="Fotoğraf" width="50" height="50" />
+                            }
+                            else
+                            {
+                                <span>Fotoğraf Yok</span>
+                            }
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Edit", new { id = person.Id })">Düzenle</a> |
+                            <a href="@Url.Action("Delete", new { id = person.Id })">Sil</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#personsTable').DataTable();
+        });
+    </script>
+</body>
+</html>
